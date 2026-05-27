@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una pregunta especial 💕</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2d0a0a 0%, #5c1a1a 40%, #8b2e2e 70%, #c0614e 100%);
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Floating petals */
+  .petal {
+    position: fixed;
+    font-size: 1.5rem;
+    animation: fall linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.85;
+  }
+
+  @keyframes fall {
+    0% { transform: translateY(-60px) rotate(0deg); opacity: 0.9; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0.3; }
+  }
+
+  .screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10;
+    padding: 2rem;
+    animation: fadeIn 0.8s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .card {
+    background: rgba(255, 240, 220, 0.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 200, 150, 0.3);
+    border-radius: 28px;
+    padding: 2.5rem 3rem;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,200,150,0.2);
+  }
+
+  .roses-top {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 4px;
+    animation: sway 3s ease-in-out infinite;
+  }
+
+  @keyframes sway {
+    0%,100% { transform: rotate(-3deg); }
+    50%      { transform: rotate(3deg); }
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    color: #ffe4b5;
+    text-shadow: 0 0 20px rgba(255,180,100,0.6);
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: #ffc8a0;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  .btn:hover { transform: scale(1.07); }
+  .btn:active { transform: scale(0.96); }
+
+  #btn-yes {
+    background: linear-gradient(135deg, #e85d5d, #c0392b);
+    color: #fff;
+    padding: 0.85rem 2rem;
+    font-size: 1.1rem;
+    transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  #btn-no {
+    background: rgba(255,255,255,0.15);
+    color: #ffd0a0;
+    border: 1px solid rgba(255,180,100,0.4);
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Date options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+
+  .date-option {
+    background: rgba(255,220,180,0.15);
+    border: 1px solid rgba(255,180,100,0.35);
+    border-radius: 18px;
+    padding: 1.2rem 0.8rem;
+    cursor: pointer;
+    color: #ffe4b5;
+    font-family: 'Georgia', serif;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .date-option:hover {
+    background: rgba(255,150,80,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  .date-option .emoji { font-size: 2rem; }
+
+  /* Confirmation */
+  .big-heart {
+    font-size: 5rem;
+    animation: heartbeat 1s ease-in-out infinite;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.18); }
+  }
+
+  .confirm-title {
+    font-size: 2rem;
+    color: #ffe4b5;
+    text-shadow: 0 0 30px rgba(255,150,80,0.8);
+    margin-bottom: 0.5rem;
+  }
+  .confirm-sub {
+    font-size: 1rem;
+    color: #ffc8a0;
+    font-style: italic;
+  }
+  .chosen-date {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: #ffb07a;
+    background: rgba(255,150,80,0.15);
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255,150,80,0.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: The question -->
+<div class="screen active" id="screen1">
+  <div class="card">
+    <div class="roses-top">🌹🌹🌹</div>
+    <h1>Hola mi xinita 🥰</h1>
+    <p class="subtitle">Tengo una pregunta muy importante para ti...</p>
+    <p style="color:#ffd0a0; font-size:1.25rem; margin-bottom:1.8rem;">¿Quieres salir en una cita conmigo? 💕</p>
+    <div class="btn-group">
+      <button class="btn" id="btn-yes" onclick="goToOptions()">Sí 🥰</button>
+      <button class="btn" id="btn-no" onclick="growYes()">No 😢</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: Date options -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <div class="roses-top">🌺🌹🌸</div>
+    <h1>¡Sabía que dirías que sí! 💖</h1>
+    <p class="subtitle">¿Qué plan te gustaría para nuestra cita?</p>
+    <div class="options-grid">
+      <button class="date-option" onclick="confirm('🍣 Comer Sushi')">
+        <span class="emoji">🍣</span> Comer Sushi
+      </button>
+      <button class="date-option" onclick="confirm('🍕 Comer Pizza')">
+        <span class="emoji">🍕</span> Comer Pizza
+      </button>
+      <button class="date-option" onclick="confirm('🧺 Picnic')">
+        <span class="emoji">🧺</span> Picnic romántico
+      </button>
+      <button class="date-option" onclick="confirm('🎬 Ver una película')">
+        <span class="emoji">🎬</span> Ver una película
+      </button>
+      <button class="date-option" onclick="confirm('☕ Tomar un café')">
+        <span class="emoji">☕</span> Café y paseo
+      </button>
+      <button class="date-option" onclick="confirm('🌆 Una sorpresa')">
+        <span class="emoji">🌆</span> ¡Sorpréndeme!
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: Confirmation -->
+<div class="screen" id="screen3">
+  <div class="card">
+    <span class="big-heart">💖</span>
+    <h1 class="confirm-title">¡Es una cita! 🎉</h1>
+    <p class="confirm-sub">No puedo esperar para estar contigo 🥰</p>
+    <div class="chosen-date" id="chosen-label"></div>
+    <div style="margin-top:1.2rem; font-size:1.5rem; letter-spacing:6px;">🌹🌹🌹</div>
+  </div>
+</div>
+
+<script>
+  // Floating petals/roses
+  const symbols = ['🌹','🌸','🌺','🌷','✨','💕','🍀'];
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+    document.body.appendChild(p);
+  }
+
+  let yesSize = 1.1;
+
+  function growYes() {
+    yesSize += 0.22;
+    const btn = document.getElementById('btn-yes');
+    btn.style.transform = `scale(${yesSize})`;
+    btn.style.fontSize = (1.1 + (yesSize - 1.1) * 0.6) + 'rem';
+    // shrink no button
+    const no = document.getElementById('btn-no');
+    const noSize = Math.max(0.5, 1 - (yesSize - 1.1) * 0.3);
+    no.style.transform = `scale(${noSize})`;
+    no.style.opacity = noSize;
+  }
+
+  function goToOptions() {
+    document.getElementById('screen1').classList.remove('active');
+    document.getElementById('screen2').classList.add('active');
+  }
+
+  function confirm(choice) {
+    document.getElementById('chosen-label').textContent = 'Nuestra cita: ' + choice + ' 💕';
+    document.getElementById('screen2').classList.remove('active');
+    document.getElementById('screen3').classList.add('active');
+    // Extra confetti hearts
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        const h = document.createElement('div');
+        h.className = 'petal';
+        h.textContent = ['💕','💖','🌹','✨'][Math.floor(Math.random()*4)];
+        h.style.left = Math.random() * 100 + 'vw';
+        h.style.animationDuration = (3 + Math.random() * 4) + 's';
+        h.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+        document.body.appendChild(h);
+      }, i * 150);
+    }
+  }
+</script>
+</body>
+</html>
